@@ -1,0 +1,25 @@
+import express, { Request, Response } from "express";
+
+const app = express()
+
+// app.use(cookieParser())
+app.use(express.json())
+app.set("trust proxy",1)
+// app.use(cors({
+//     origin: "http://localhost:5173",
+//     credentials: true
+// }))
+// app.use(cors({
+//     origin: "https://aadil-pay-client.vercel.app",
+//     credentials: true
+// }))
+// app.use("/api", router)
+app.get("/", (req: Request, res: Response) => {
+    res.status(200).json({
+        message: "Welcome to EduTech"
+    })
+})
+// app.use(globalErrorHandler)
+// app.use(notFound)
+
+export default app
