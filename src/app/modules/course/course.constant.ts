@@ -1,0 +1,1 @@
+export const courseSearchableFields = ["title", "overview.description", "overview.whatStudentLearn", "level", "instructor.name"];
