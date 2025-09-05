@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import { router } from "./app/routes";
 
 const app = express()
 
@@ -13,7 +14,7 @@ app.set("trust proxy",1)
 //     origin: "https://aadil-pay-client.vercel.app",
 //     credentials: true
 // }))
-// app.use("/api", router)
+app.use("/api", router)
 app.get("/", (req: Request, res: Response) => {
     res.status(200).json({
         message: "Welcome to EduTech"
