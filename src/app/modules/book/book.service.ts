@@ -7,8 +7,8 @@ const createBook = async (payload: IBook) => {
   return book;
 };
 
-// get all course 
 
+// get all course 
 const getAllBooks = async (): Promise<IBook[]> => {
   const books = await Book.find().lean<IBook[]>();
   return books;

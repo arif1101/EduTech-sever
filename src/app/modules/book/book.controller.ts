@@ -20,7 +20,7 @@ const createBook = catchAsync(async(req:Request, res: Response, next: NextFuncti
     });
 })
 
-
+// getAllBooks
 const getAllBooks = catchAsync(async (req: Request, res: Response) => {
   const books = await BookService.getAllBooks();
 
