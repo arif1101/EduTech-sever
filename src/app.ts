@@ -1,15 +1,17 @@
 import express, { Request, Response } from "express";
 import { router } from "./app/routes";
+import cors from "cors"
+import cookieParser from "cookie-parser";
 
 const app = express()
 
-// app.use(cookieParser())
+app.use(cookieParser())
 app.use(express.json())
 app.set("trust proxy",1)
-// app.use(cors({
-//     origin: "http://localhost:5173",
-//     credentials: true
-// }))
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}))
 // app.use(cors({
 //     origin: "https://aadil-pay-client.vercel.app",
 //     credentials: true

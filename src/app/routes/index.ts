@@ -3,6 +3,7 @@ import { UserRoutes } from "../modules/user/user.route";
 import { AuthRoutes } from "../modules/auth/auth.route";
 import { CourseRoutes } from "../modules/course/course.route";
 import { BookRoutes } from "../modules/book/book.route";
+import { CartRoutes } from "../modules/cart/cart.route";
 
 
 
@@ -24,6 +25,10 @@ const moduleRoutes =[
     {
         path: "/book",
         router: BookRoutes
+    },
+    {
+        path: "/cart",
+        router: CartRoutes
     }
 ]
 

@@ -7,5 +7,6 @@ const router = Router()
 
 router.post("/create",checkAuth(Role.ADMIN),CourseController.createCourse)
 router.get("/", CourseController.getAllCourses);
+router.get("/:id", CourseController.getSingleCourse);
 
 export const CourseRoutes = router

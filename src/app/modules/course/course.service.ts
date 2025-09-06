@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { ICourse } from "./course.interface";
 import { Course } from "./course.model";
 
@@ -14,8 +15,21 @@ const getAllCourses = async (): Promise<ICourse[]> => {
   return courses;
 };
 
+// get single course 
+
+const getSingleCourse = async (id: string) => {
+  if (!Types.ObjectId.isValid(id)) return null;
+
+  const course = await Course.findById(id)
+    // .populate("instructor")      // populate instructor if it's a ref
+    // .populate("instructors")     // populate multiple instructors
+    .lean();
+
+  return course;
+};
 
 export const CourseService = {
   createCourse,
-  getAllCourses
+  getAllCourses,
+  getSingleCourse
 };
