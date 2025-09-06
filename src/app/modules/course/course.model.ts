@@ -1,15 +1,35 @@
 import { Schema, model, Document, Types } from "mongoose";
 
+// ---------- Enums ----------
 export enum CourseLevel {
   BEGINNER = "Beginner",
   INTERMEDIATE = "Intermediate",
   ADVANCED = "Advanced",
 }
 
+export enum CourseCategory {
+  ACADEMIC = "Academic",
+  TECHNOLOGY = "Technology",
+  BUSINESS = "Business",
+  ARTS = "Arts",
+  LANGUAGE = "Language",
+}
+
+export enum CourseLanguage {
+  ENGLISH = "English",
+  BANGLA = "Bangla",
+}
+
+export enum CourseClassLevel {
+  CLASS_11_12 = "Class 11-12",
+  VERSITY = "Versity",
+}
+
+// ---------- Interfaces ----------
 interface IInstructor {
   name: string;
   photo?: string;
-  status?: string;
+  status?: string; // e.g. Professor
 }
 
 interface IReview {
@@ -33,13 +53,23 @@ interface ICurriculumSection {
 
 export interface ICourse extends Document {
   title: string;
+  category: CourseCategory;
+  subject: string;
+  language: CourseLanguage;
+  classLevel: CourseClassLevel;
+
   studentsEnrolled: number;
   lastUpdate: Date;
   level: CourseLevel;
+  duration: number;
+  price?: number;
+  thumbnail?: string;
+  tags?: string[];
+
   instructor: IInstructor;
+  instructors: IInstructor[];
   overview: IOverview;
   curriculum: ICurriculumSection[];
-  instructors: IInstructor[];
   reviews: IReview[];
   averageRating?: number;
 }
@@ -70,20 +100,43 @@ const CurriculumSectionSchema = new Schema<ICurriculumSection>({
   contents: [String],
 });
 
-// ---------- Main Course Schema ----------
+// ---------- Main Schema ----------
 const CourseSchema = new Schema<ICourse>(
   {
     title: { type: String, required: true },
+    category: {
+      type: String,
+      enum: Object.values(CourseCategory),
+      required: true,
+    },
+    subject: { type: String, required: true },
+    language: {
+      type: String,
+      enum: Object.values(CourseLanguage),
+      required: true,
+    },
+    classLevel: {
+      type: String,
+      enum: Object.values(CourseClassLevel),
+      required: true,
+    },
+
     studentsEnrolled: { type: Number, default: 0 },
+    lastUpdate: { type: Date, default: Date.now },
     level: {
       type: String,
       enum: Object.values(CourseLevel),
       required: true,
     },
-    instructor: InstructorSchema, // primary instructor
+    duration: { type: Number, required: true }, // hours
+    price: { type: Number },
+    thumbnail: { type: String },
+    tags: [String],
+
+    instructor: InstructorSchema,
+    instructors: [InstructorSchema],
     overview: OverviewSchema,
     curriculum: [CurriculumSectionSchema],
-    instructors: [InstructorSchema], // multiple instructors
     reviews: [ReviewSchema],
     averageRating: { type: Number, min: 0, max: 5 },
   },

@@ -4,6 +4,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { CourseService } from "./course.service";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes"
+import AppError from "../../errorHelpers/AppError";
 
 
 
@@ -32,7 +33,31 @@ const getAllCourses = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getSingleCourse = catchAsync(async (req: Request, res: Response) => {
+  const courseId = req.params.id;
+
+  if (!courseId) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Course ID is required");
+  }
+
+  const course = await CourseService.getSingleCourse(courseId);
+
+  if (!course) {
+    throw new AppError(httpStatus.NOT_FOUND, "Course not found");
+  }
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK, // use OK instead of CREATED
+    message: "Course retrieved successfully",
+    data: course,
+  });
+});
+
+
+
 export const CourseController = {
     createCourse,
-    getAllCourses
+    getAllCourses,
+    getSingleCourse
 };

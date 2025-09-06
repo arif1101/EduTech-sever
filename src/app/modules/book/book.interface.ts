@@ -15,7 +15,9 @@ export interface IBook {
   softPrice: number;
   hardPrice: number;
   details: string; // description of the book
-  category?: string; // optional
+  copyType: "Hardcopy" | "Softcopy"; // ✅ new field
+  category: "Academic" | "Technology" | "Business"; // ✅ new field
+  language: "English" | "Bangla"; // ✅ new field
   publishedDate?: Date;
   reviews?: IReview[];
   rating?: number; // average rating
