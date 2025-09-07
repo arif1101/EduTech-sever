@@ -7,5 +7,6 @@ const router = Router()
 
 router.post("/create",checkAuth(Role.ADMIN),BookController.createBook)
 router.get("/", BookController.getAllBooks);
+router.get("/:id", BookController.getSinglebook);
 
 export const BookRoutes = router
