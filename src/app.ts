@@ -13,7 +13,7 @@ app.use(cors({
     credentials: true
 }))
 // app.use(cors({
-//     origin: "https://aadil-pay-client.vercel.app",
+//     origin: "https://edu-tech-client-one.vercel.app",
 //     credentials: true
 // }))
 app.use("/api", router)

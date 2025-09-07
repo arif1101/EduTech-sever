@@ -4,6 +4,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes"
 import { BookService } from "./book.service";
+import AppError from "../../errorHelpers/AppError";
 
 
 
@@ -15,7 +16,7 @@ const createBook = catchAsync(async(req:Request, res: Response, next: NextFuncti
     sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
-    message: "Course created successfully",
+    message: "Book created successfully",
     data: book,
     });
 })
@@ -32,7 +33,29 @@ const getAllBooks = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// single book 
+const getSinglebook = catchAsync(async (req: Request, res: Response) => {
+  const bookId = req.params.id;
+
+  if (!bookId) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Book ID is required");
+  }
+
+  const book = await BookService.getSingleBook(bookId);
+  if (!book) {
+    throw new AppError(httpStatus.NOT_FOUND, "Book not found");
+  }
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK, // use OK instead of CREATED
+    message: "Book retrieved successfully",
+    data: book,
+  });
+});
+
 export const BookController = {
     createBook,
-    getAllBooks
+    getAllBooks,
+    getSinglebook
 };
