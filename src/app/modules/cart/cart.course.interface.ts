@@ -5,7 +5,7 @@ export interface ICourseCartItem {
   course: Types.ObjectId;
   title: string;
   price: number;
-  image?: string;
+  thumbnail?: string | undefined;
 }
 
 export interface ICourseCart {

@@ -7,7 +7,7 @@ const CourseCartItemSchema = new Schema<ICourseCartItem>(
     course: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     title: { type: String, required: true },
     price: { type: Number, required: true },
-    image: { type: String},
+    thumbnail: { type: String},
   },
   { _id: false }
 );

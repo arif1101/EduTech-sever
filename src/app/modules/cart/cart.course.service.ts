@@ -31,7 +31,7 @@ const addToCart = async ({
           course: course._id,
           title: course.title,
           price: course.price,
-          image: course.image,
+          thumbnail: course.thumbnail,
         },
       ],
     });
@@ -52,8 +52,8 @@ const addToCart = async ({
     cart.items.push({
     course: course._id as Types.ObjectId, // <-- fixes TS error
     title: course.title,
-    price: course.price,
-    image: course.image, // optional
+    price: Number(course.price),
+    thumbnail: course.thumbnail, // optional
     });
   }
 
