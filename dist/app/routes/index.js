@@ -7,6 +7,7 @@ const auth_route_1 = require("../modules/auth/auth.route");
 const course_route_1 = require("../modules/course/course.route");
 const book_route_1 = require("../modules/book/book.route");
 const cart_route_1 = require("../modules/cart/cart.route");
+const cart_course_route_1 = require("../modules/cart/cart.course.route");
 exports.router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -24,6 +25,10 @@ const moduleRoutes = [
     {
         path: "/book",
         router: book_route_1.BookRoutes
+    },
+    {
+        path: "/cart",
+        router: cart_course_route_1.CartCourseRoutes
     },
     {
         path: "/cart",
