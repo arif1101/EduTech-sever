@@ -8,10 +8,18 @@ const app = express()
 app.use(cookieParser())
 app.use(express.json())
 app.set("trust proxy",1)
+
+// -------------- NextJS ---------
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:3000",
     credentials: true
 }))
+
+// ---------- for react -------- 
+// app.use(cors({
+//     origin: "http://localhost:5173",
+//     credentials: true
+// }))
 // app.use(cors({
 //     origin: "https://edu-tech-client-one.vercel.app",
 //     credentials: true

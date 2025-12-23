@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { ICourse } from "./course.interface";
+import { CourseFilterQuery, ICourse } from "./course.interface";
 import { Course } from "./course.model";
 
 // create course 
@@ -10,10 +10,48 @@ const createCourse = async (payload: ICourse) => {
 
 // get all course 
 
-const getAllCourses = async (): Promise<ICourse[]> => {
-  const courses = await Course.find().lean<ICourse[]>();
+
+
+const getAllCourses = async (
+  query: CourseFilterQuery
+): Promise<ICourse[]> => {
+  const filter: any = {};
+
+  // ⭐ Rating filter
+  if (query.minRating) {
+    filter.averageRating = { $gte: Number(query.minRating) };
+  }
+
+  // 🌐 Language filter
+  if (query.language) {
+    filter.language = query.language;
+  }
+
+  // 🎓 Level filter
+  if (query.level) {
+    filter.level = query.level;
+  }
+
+  // 🗂 Category filter
+  if (query.category) {
+    filter.category = query.category;
+  }
+
+  // 💰 Price filter
+  if (query.minPrice || query.maxPrice) {
+    filter.price = {};
+    if (query.minPrice) {
+      filter.price.$gte = Number(query.minPrice);
+    }
+    if (query.maxPrice) {
+      filter.price.$lte = Number(query.maxPrice);
+    }
+  }
+
+  const courses = await Course.find(filter).lean<ICourse[]>();
   return courses;
 };
+
 
 // get single course 
 
