@@ -7,7 +7,7 @@ const router = Router();
 
 router.post(
   "/create",
-  checkAuth(Role.ADMIN),
+  // checkAuth(Role.ADMIN),
   LessonController.createLesson
 );
 

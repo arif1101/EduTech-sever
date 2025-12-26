@@ -3,24 +3,22 @@ import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
 import { CourseService } from "./course.service";
 import { sendResponse } from "../../utils/sendResponse";
-import httpStatus from "http-status-codes"
+import httpStatus from "http-status-codes";
 import AppError from "../../errorHelpers/AppError";
 
-
-
-
-const createCourse = catchAsync(async(req:Request, res: Response, next: NextFunction) => {
+const createCourse = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const courseData = req.body;
-    const course = await CourseService.createCourse(courseData)
+    const course = await CourseService.createCourse(courseData);
 
     sendResponse(res, {
-    success: true,
-    statusCode: httpStatus.CREATED,
-    message: "Course created successfully",
-    data: course,
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Course created successfully",
+      data: course,
     });
-})
-
+  }
+);
 
 const getAllCourses = catchAsync(async (req: Request, res: Response) => {
   const courses = await CourseService.getAllCourses(req.query);
@@ -54,10 +52,21 @@ const getSingleCourse = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getFullCourse = async (req: Request, res: Response) => {
+  const { id } = req.params;
 
+  const data = await CourseService.getFullCourse(id);
+
+  res.status(200).json({
+    success: true,
+    message: "Full course retrieved successfully",
+    data,
+  });
+};
 
 export const CourseController = {
-    createCourse,
-    getAllCourses,
-    getSingleCourse
+  createCourse,
+  getAllCourses,
+  getSingleCourse,
+  getFullCourse
 };

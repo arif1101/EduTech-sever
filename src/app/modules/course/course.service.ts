@@ -1,20 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Types } from "mongoose";
 import { CourseFilterQuery, ICourse } from "./course.interface";
 import { Course } from "./course.model";
+import { Section } from "../section/section.model";
+import { Lesson } from "../lesson/lesson.model";
 
-// create course 
+// create course
 const createCourse = async (payload: ICourse) => {
   const course = await Course.create(payload);
   return course;
 };
 
-// get all course 
-
-
-
-const getAllCourses = async (
-  query: CourseFilterQuery
-): Promise<ICourse[]> => {
+// get all course
+const getAllCourses = async (query: CourseFilterQuery): Promise<ICourse[]> => {
   const filter: any = {};
 
   // ⭐ Rating filter
@@ -52,9 +50,7 @@ const getAllCourses = async (
   return courses;
 };
 
-
-// get single course 
-
+// get single course
 const getSingleCourse = async (id: string) => {
   if (!Types.ObjectId.isValid(id)) return null;
 
@@ -66,8 +62,38 @@ const getSingleCourse = async (id: string) => {
   return course;
 };
 
+const getFullCourse = async (courseId: string) => {
+  // 1. Get course
+  const course = await Course.findById(courseId);
+  if (!course) return null;
+
+  // 2. Get sections
+  const sections = await Section.find({ course: courseId }).sort({ order: 1 });
+
+  // 3. Get lessons for each section
+  const sectionsWithLessons = await Promise.all(
+    sections.map(async (section) => {
+      const lessons = await Lesson.find({ section: section._id }).sort({
+        order: 1,
+      });
+
+      return {
+        ...section.toObject(),
+        lessons,
+      };
+    })
+  );
+
+  return {
+    course,
+    sections: sectionsWithLessons,
+  };
+};
+
+
 export const CourseService = {
   createCourse,
   getAllCourses,
-  getSingleCourse
+  getSingleCourse,
+  getFullCourse
 };
