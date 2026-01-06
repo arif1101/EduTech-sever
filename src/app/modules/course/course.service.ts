@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { CourseFilterQuery, ICourse } from "./course.interface";
 import { Course } from "./course.model";
 import { Section } from "../section/section.model";
@@ -91,9 +91,51 @@ const getFullCourse = async (courseId: string) => {
 };
 
 
+const deleteCourse = async (courseId: string) => {
+  if (!Types.ObjectId.isValid(courseId)) return null;
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    // 1️⃣ Check course
+    const course = await Course.findById(courseId).session(session);
+    if (!course) {
+      await session.abortTransaction();
+      session.endSession();
+      return null;
+    }
+
+    // 2️⃣ Find sections
+    const sections = await Section.find({ course: courseId }).session(session);
+    const sectionIds = sections.map(section => section._id);
+
+    // 3️⃣ Delete lessons
+    await Lesson.deleteMany({ section: { $in: sectionIds } }).session(session);
+
+    // 4️⃣ Delete sections
+    await Section.deleteMany({ course: courseId }).session(session);
+
+    // 5️⃣ Delete course
+    await Course.findByIdAndDelete(courseId).session(session);
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return true;
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
+  }
+};
+
+
+
 export const CourseService = {
   createCourse,
   getAllCourses,
   getSingleCourse,
-  getFullCourse
+  getFullCourse,
+  deleteCourse
 };
