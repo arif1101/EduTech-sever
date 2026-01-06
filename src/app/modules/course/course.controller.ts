@@ -52,8 +52,12 @@ const getSingleCourse = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getFullCourse = async (req: Request, res: Response) => {
+const getFullCourse = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
+
+  if (!id) {
+    return next(new AppError(httpStatus.BAD_REQUEST, "Course ID is required"));
+  }
 
   const data = await CourseService.getFullCourse(id);
 
@@ -64,9 +68,33 @@ const getFullCourse = async (req: Request, res: Response) => {
   });
 };
 
+const deleteCourse = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+
+    if (!id) {
+      throw new AppError(httpStatus.BAD_REQUEST, "Course ID is required");
+    }
+
+    const result = await CourseService.deleteCourse(id);
+
+    if (!result) {
+      throw new AppError(httpStatus.NOT_FOUND, "Course not found");
+    }
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Course and related data deleted successfully",
+      data: null,
+    });
+  }
+);
+
 export const CourseController = {
   createCourse,
   getAllCourses,
   getSingleCourse,
-  getFullCourse
+  getFullCourse,
+  deleteCourse
 };

@@ -7,6 +7,9 @@ import { CartRoutes } from "../modules/cart/cart.route";
 import { CartCourseRoutes } from "../modules/cart/cart.course.route";
 import { SectionRoutes } from "../modules/section/section.route";
 import { LessonRoutes } from "../modules/lesson/lesson.route";
+import { PaymentRoutes } from "../modules/payment/payment.route";
+import { EnrollmentRoutes } from "../modules/enrollment/enrollment.routes";
+import { AdminRoutes } from "../modules/admin/admin.route";
 
 export const router = Router();
 
@@ -42,6 +45,18 @@ const moduleRoutes = [
   {
     path: "/cart",
     router: CartRoutes,
+  },
+  {
+    path: "/payment",
+    router: PaymentRoutes,
+  },
+  {
+    path: "/enrollment",
+    router: EnrollmentRoutes,
+  },
+    {
+    path: "/admin",
+    router: AdminRoutes,
   },
 ];
 

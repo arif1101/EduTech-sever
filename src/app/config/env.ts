@@ -12,10 +12,11 @@ interface EnvConfig {
     ADMIN_EMAIL: string,
     ADMIN_PASSWORD: string,
     PHONE : string,
+    STRIPE_SECRET_KEY :string
 }
 
 const loadEnvVariables = (): EnvConfig => {
-    const requiredEnvVariables: string[] = ["PORT", "DB_URL", "NODE_ENV","BCRYPT_SALT_ROUND", "JWT_ACCESS_EXPIRES", "JWT_ACCESS_SECRET", "ADMIN_EMAIL", "ADMIN_PASSWORD", "PHONE"];
+    const requiredEnvVariables: string[] = ["PORT", "DB_URL", "NODE_ENV","BCRYPT_SALT_ROUND", "JWT_ACCESS_EXPIRES", "JWT_ACCESS_SECRET", "ADMIN_EMAIL", "ADMIN_PASSWORD", "PHONE", "STRIPE_SECRET_KEY"];
 
     requiredEnvVariables.forEach(key => {
         if (!process.env[key]) {
@@ -34,6 +35,7 @@ const loadEnvVariables = (): EnvConfig => {
         ADMIN_EMAIL: process.env.ADMIN_EMAIL as string,
         ADMIN_PASSWORD: process.env.ADMIN_PASSWORD as string,
         PHONE: process.env.PHONE as string,
+        STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY as string
     }
 }
 
