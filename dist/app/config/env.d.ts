@@ -8,6 +8,7 @@ interface EnvConfig {
     ADMIN_EMAIL: string;
     ADMIN_PASSWORD: string;
     PHONE: string;
+    STRIPE_SECRET_KEY: string;
 }
 export declare const envVars: EnvConfig;
 export {};
