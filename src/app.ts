@@ -11,11 +11,6 @@ app.use(cookieParser())
 app.use(express.json())
 app.set("trust proxy",1)
 
-// -------------- NextJS ---------
-// app.use(cors({
-//     origin: "http://localhost:3000",
-//     credentials: true
-// }))
 
 app.use(cors({
     origin: ["https://edu-mart-client.vercel.app","http://localhost:3000"],
