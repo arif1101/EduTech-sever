@@ -53,9 +53,32 @@ const updateReview = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getCourseReviews = catchAsync(async (req: Request, res: Response) => {
+  const { courseId } = req.params;
+  const reviews = await ReviewService.getCourseReviews(courseId);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    data: reviews,
+  });
+});
+
+const getMyReview = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.user!.userId;
+  const { courseId } = req.params;
+  const review = await ReviewService.getMyReview(userId, courseId);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    data: review,
+  });
+});
+
 
 export const ReviewController = {
   createReview,
   deleteReview,
-  updateReview
+  updateReview,
+  getMyReview,
+  getCourseReviews
 };

@@ -40,11 +40,7 @@ const createReview = async (
   return review;
 };
 
-const deleteReview = async (
-  reviewId: string,
-  userId: string,
-  role: string
-) => {
+const deleteReview = async (reviewId: string, userId: string, role: string) => {
   const review = await Review.findById(reviewId);
 
   if (!review) {
@@ -52,16 +48,12 @@ const deleteReview = async (
   }
 
   // Owner or admin can delete
-  if (
-    review.user.toString() !== userId &&
-    role !== "ADMIN"
-  ) {
+  if (review.user.toString() !== userId && role !== "ADMIN") {
     throw new Error("Not authorized to delete this review");
   }
 
   await review.deleteOne();
 };
-
 
 const updateReview = async (
   reviewId: string,
@@ -88,9 +80,27 @@ const updateReview = async (
   return review;
 };
 
+const getCourseReviews = async (courseId: string) => {
+  const reviews = await Review.find({ course: courseId })
+    .populate("user", "name email")
+    .sort({ createdAt: -1 });
+
+  return reviews;
+};
+
+const getMyReview = async (userId: string, courseId: string) => {
+  const review = await Review.findOne({
+    user: userId,
+    course: courseId,
+  }).populate("user", "name email");
+
+  return review;
+};
 
 export const ReviewService = {
   createReview,
   deleteReview,
-  updateReview
+  updateReview,
+  getCourseReviews,
+  getMyReview,
 };
