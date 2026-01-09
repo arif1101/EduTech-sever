@@ -7,7 +7,7 @@ exports.envVars = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const loadEnvVariables = () => {
-    const requiredEnvVariables = ["PORT", "DB_URL", "NODE_ENV", "BCRYPT_SALT_ROUND", "JWT_ACCESS_EXPIRES", "JWT_ACCESS_SECRET", "ADMIN_EMAIL", "ADMIN_PASSWORD", "PHONE"];
+    const requiredEnvVariables = ["PORT", "DB_URL", "NODE_ENV", "BCRYPT_SALT_ROUND", "JWT_ACCESS_EXPIRES", "JWT_ACCESS_SECRET", "ADMIN_EMAIL", "ADMIN_PASSWORD", "PHONE", "STRIPE_SECRET_KEY"];
     requiredEnvVariables.forEach(key => {
         if (!process.env[key]) {
             throw new Error(`Missing require environment variabl ${key}`);
@@ -24,6 +24,7 @@ const loadEnvVariables = () => {
         ADMIN_EMAIL: process.env.ADMIN_EMAIL,
         ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
         PHONE: process.env.PHONE,
+        STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY
     };
 };
 exports.envVars = loadEnvVariables();

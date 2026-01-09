@@ -62,4 +62,12 @@ export interface ICourse {
     reviews: IReview[];
     averageRating?: number;
 }
+export interface CourseFilterQuery {
+    minRating?: string;
+    language?: string;
+    level?: string;
+    category?: string;
+    minPrice?: string;
+    maxPrice?: string;
+}
 //# sourceMappingURL=course.interface.d.ts.map

@@ -20,7 +20,7 @@ const createCourse = (0, catchAsync_1.catchAsync)(async (req, res, next) => {
     });
 });
 const getAllCourses = (0, catchAsync_1.catchAsync)(async (req, res) => {
-    const courses = await course_service_1.CourseService.getAllCourses();
+    const courses = await course_service_1.CourseService.getAllCourses(req.query);
     (0, sendResponse_1.sendResponse)(res, {
         statusCode: http_status_codes_1.default.OK,
         success: true,
@@ -44,9 +44,39 @@ const getSingleCourse = (0, catchAsync_1.catchAsync)(async (req, res) => {
         data: course,
     });
 });
+const getFullCourse = async (req, res, next) => {
+    const { id } = req.params;
+    if (!id) {
+        return next(new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "Course ID is required"));
+    }
+    const data = await course_service_1.CourseService.getFullCourse(id);
+    res.status(200).json({
+        success: true,
+        message: "Full course retrieved successfully",
+        data,
+    });
+};
+const deleteCourse = (0, catchAsync_1.catchAsync)(async (req, res, next) => {
+    const { id } = req.params;
+    if (!id) {
+        throw new AppError_1.default(http_status_codes_1.default.BAD_REQUEST, "Course ID is required");
+    }
+    const result = await course_service_1.CourseService.deleteCourse(id);
+    if (!result) {
+        throw new AppError_1.default(http_status_codes_1.default.NOT_FOUND, "Course not found");
+    }
+    (0, sendResponse_1.sendResponse)(res, {
+        success: true,
+        statusCode: http_status_codes_1.default.OK,
+        message: "Course and related data deleted successfully",
+        data: null,
+    });
+});
 exports.CourseController = {
     createCourse,
     getAllCourses,
-    getSingleCourse
+    getSingleCourse,
+    getFullCourse,
+    deleteCourse
 };
 //# sourceMappingURL=course.controller.js.map
