@@ -13,6 +13,7 @@ const lesson_route_1 = require("../modules/lesson/lesson.route");
 const payment_route_1 = require("../modules/payment/payment.route");
 const enrollment_routes_1 = require("../modules/enrollment/enrollment.routes");
 const admin_route_1 = require("../modules/admin/admin.route");
+const review_route_1 = require("../modules/review/review.route");
 exports.router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -58,6 +59,10 @@ const moduleRoutes = [
     {
         path: "/admin",
         router: admin_route_1.AdminRoutes,
+    },
+    {
+        path: "/reviews",
+        router: review_route_1.ReviewRoutes,
     },
 ];
 moduleRoutes.forEach((route) => {
