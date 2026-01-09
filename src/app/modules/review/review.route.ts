@@ -23,5 +23,14 @@ router.patch(
   ReviewController.updateReview
 );
 
+// review.route.ts - Add this route
+router.get(
+  "/course/:courseId/my-review",
+  checkAuth(Role.USER, Role.ADMIN),
+  ReviewController.getMyReview
+);
+
+router.get("/course/:courseId", ReviewController.getCourseReviews);
+
 
 export const ReviewRoutes = router;

@@ -2,13 +2,18 @@ import { Request, Response } from "express";
 import httpStatus from "http-status-codes";
 import { catchAsync } from "../../utils/catchAsync";
 import { ReviewService } from "./review.service";
+import { getAuthUser } from "../../utils/getAuthUser";
 
 const createReview = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user!.userId;
+  const user = getAuthUser(req);
   const { courseId, rating, message } = req.body;
 
+  if (!courseId) {
+    throw new Error("Course ID is required");
+  }
+
   const review = await ReviewService.createReview(
-    userId,
+    user.userId,
     courseId,
     rating,
     message
@@ -22,11 +27,14 @@ const createReview = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteReview = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user!.userId;
-  const role = req.user!.role;
+  const user = getAuthUser(req);
   const { reviewId } = req.params;
 
-  await ReviewService.deleteReview(reviewId, userId, role);
+  if (!reviewId) {
+    throw new Error("Review ID is required");
+  }
+
+  await ReviewService.deleteReview(reviewId, user.userId, user.role);
 
   res.status(httpStatus.OK).json({
     success: true,
@@ -35,13 +43,17 @@ const deleteReview = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateReview = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user!.userId;
+  const user = getAuthUser(req);
   const { reviewId } = req.params;
   const { rating, message } = req.body;
 
+  if (!reviewId) {
+    throw new Error("Review ID is required");
+  }
+
   const review = await ReviewService.updateReview(
     reviewId,
-    userId,
+    user.userId,
     rating,
     message
   );
@@ -53,9 +65,41 @@ const updateReview = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getCourseReviews = catchAsync(async (req: Request, res: Response) => {
+  const { courseId } = req.params;
+
+  if (!courseId) {
+    throw new Error("Course ID is required");
+  }
+
+  const reviews = await ReviewService.getCourseReviews(courseId);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    data: reviews,
+  });
+});
+
+const getMyReview = catchAsync(async (req: Request, res: Response) => {
+  const user = getAuthUser(req);
+  const { courseId } = req.params;
+
+  if (!courseId) {
+    throw new Error("Course ID is required");
+  }
+
+  const review = await ReviewService.getMyReview(user.userId, courseId);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    data: review,
+  });
+});
 
 export const ReviewController = {
   createReview,
   deleteReview,
-  updateReview
+  updateReview,
+  getMyReview,
+  getCourseReviews,
 };
